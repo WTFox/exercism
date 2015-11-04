@@ -1,6 +1,6 @@
 # exercism io sieve.py
 
-def sieve(num):
+def sieve(limit):
     ''' Write a program that uses the Sieve of Eratosthenes to find all the
     primes from 2 up to a given number.
 
@@ -24,26 +24,14 @@ def sieve(num):
 
     '''
 
-    rangeList = [x for x in range(2, num+1)]
-    outputList = [x for x in range(2, num+1)]
+    unwantedList = []
+    nums = [x for x in range(2, limit+1)]
 
-    for index in rangeList: # first iteration
-        for subindex in rangeList:
-            try:
-                outputList.remove(index+index)
-            except:
-                pass
+    for index, num in enumerate(nums):
+        for x in nums[index::num][1:]:
+            unwantedList.append(x)
 
-
-        # for f in l:
-        #     try:
-        #         l.remove(x+x)
-        #     except:
-        #         pass
-
-    print(outputList)
-    return
-
+    return [x for x in nums if not x in unwantedList]
 
 if __name__ == '__main__':
     sieve(10)
