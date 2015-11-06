@@ -8,21 +8,23 @@ def encode(msg):
     tmap = dict(zip("abcdefghijklmnopqrstuvwxyz",
                     "zyxwvutsrqponmlkjihgfedcba"))
 
-    for index, letter in enumerate(cleansedMsg):
-        print(index, letter)
+    for index, char in enumerate(cleansedMsg):
+        if char.isalpha():
+            encodedMsg += tmap[char]
+        elif char.isdigit():
+            encodedMsg += char
 
-        if letter.isalpha():
-            encodedMsg += tmap[letter]
-        elif letter.isdigit():
-            encodedMsg += letter
+        if index % 5 == 4:
+            encodedMsg += ' '
 
-    return encodedMsg
+    return encodedMsg.strip()
 
 
 def decode(msg):
     output = []
     tmap = dict(zip("zyxwvutsrqponmlkjihgfedcba",
                     "abcdefghijklmnopqrstuvwxyz"))
+
     for x in msg.lower().strip():
         if x.isalpha():
             output.append(tmap[x])
@@ -30,8 +32,3 @@ def decode(msg):
             output.append(x)
 
     return ''.join(output).strip()
-
-
-if __name__ == '__main__':
-    print(encode("Truth is fiction."))
-    print("gifgs rhurx grlm")
