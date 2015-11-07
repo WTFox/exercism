@@ -7,30 +7,31 @@ class Garden(object):
                 "Eve", "Fred", "Ginny", "Harriet",
                  "Ileana", "Joseph", "Kincaid", "Larry"]
 
+
     def __init__(self, plants, students=_students):
-        self.plants1, self.plants2 = plants.split('\n')
-        self.students = students
+        self.firstRow, self.secondRow = plants.split('\n')
+        self._students = students
         self.myMap = {}
 
-
-        tmp = []
-        for i, p1 in enumerate(self.plants1):
-            tmp.append([p1, self.plants2[i]])
-
-
-        # Failing when parsing plants. Needs major reworking.
+        index = 0
         for student in self.students:
+            print(student)
             try:
-                self.myMap[student] = []
-                self.myMap[student].append(tmp[0].pop(0))
-                self.myMap[student].append(tmp[1].pop(0))
-                self.myMap[student].append(tmp[0].pop(0))
-                self.myMap[student].append(tmp[1].pop(0))
-            except:
-                pass
+                plantList = [self.firstRow[index],
+                            self.firstRow[index+1],
+                            self.secondRow[index],
+                            self.secondRow[index+1]]
+            except IndexError:
+                continue
+            self.myMap[student] = plantList
+            index += 2
 
         print(self.myMap)
         return
+
+    @property
+    def students(self):
+        return sorted(self._students)
 
     def plants(self, name):
         translation = {
@@ -39,6 +40,7 @@ class Garden(object):
             'G': 'Grass',
             'V': 'Violets'
         }
+
         print([translation[x] for x in self.myMap[name]])
         return [translation[x] for x in self.myMap[name]]
 
