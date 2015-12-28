@@ -1,54 +1,40 @@
 __author__ = 'afox'
 
-import re
 
-def encode(dataset):
-    """
-    This is working.. but it ain't pretty.
-
-    :param dataset:
-    :return:
-
-    """
-    counter = 1
-    output = []
-
-    for i, v in enumerate(dataset):
-        if hasNext(i, dataset):
-            nextChar = dataset[i + 1]
-            if v == nextChar:
-                counter += 1
-
-            elif v != nextChar:
-                if counter == 1:
-                    output.append("{}{}".format('', v))
-                else:
-                    output.append("{}{}".format(counter, v))
-                counter = 1
-
+def encode(string_arg):
+    tmp = ''
+    base_letter = string_arg[0]
+    current_letter_count = 0
+    for n, char in enumerate(string_arg, 1):
+        if char == base_letter:
+            current_letter_count += 1
         else:
-            if v == dataset[i - 1]:
-                if counter == 1:
-                    output.append("{}{}".format('', v))
-                else:
-                    output.append("{}{}".format(counter, v))
+            if current_letter_count is not 1:
+                tmp += str(current_letter_count)
+            tmp += base_letter
+            base_letter = char
+            current_letter_count = 1
 
-            else:
-                if counter == 1:
-                    output.append("{}{}".format('', v))
-                else:
-                    output.append("{}{}".format(counter, v))
+        if n == len(string_arg):
+            if current_letter_count is not 1:
+                tmp += str(current_letter_count)
+            tmp += base_letter
 
-    return ''.join(output)
+    return tmp
 
-
-def decode(dataset):
-    pass
-
-
-def hasNext(index, obj):
-    return (len(obj) - index) > 1
-
+def decode(string_arg):
+    tmp = ''
+    multiplier = ''
+    for n, char in enumerate(string_arg, 1):
+        if char.isdigit():
+            multiplier += char
+            continue
+        if multiplier == '':
+            tmp += char
+        else:
+            tmp += char * int(multiplier)
+        multiplier = ''
+    return tmp
 
 if __name__ == '__main__':
     print(encode('AABBBCCCC'))
