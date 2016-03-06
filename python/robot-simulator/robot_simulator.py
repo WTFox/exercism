@@ -50,3 +50,4 @@ class Robot(object):
 
         for i in instructions:
             getattr(self, hash_map[i])()
+
