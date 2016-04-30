@@ -86,3 +86,7 @@ def say_chunk(num):
                 output_string_list.append(tens[modifier - 2])
 
     return ' '.join(output_string_list)
+
+if __name__ == '__main__':
+    resp = say(1234876126)
+    print(resp)
