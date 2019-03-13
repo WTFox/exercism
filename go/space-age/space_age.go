@@ -4,7 +4,7 @@ package space
 type Planet string
 
 // getConversion returns the seconds needed to calculate age
-func (p *Planet) getConversion() (conversion float64) {
+func (p *Planet) getConversion() float64 {
 	const earthSeconds float64 = 31557600
 	conversions := map[Planet]float64{
 		"Earth":   earthSeconds,
