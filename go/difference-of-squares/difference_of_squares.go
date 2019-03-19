@@ -7,11 +7,8 @@ func Difference(num int) int {
 
 // SquareOfSum returns the square of sum(1...Num) inclusive
 func SquareOfSum(num int) int {
-	summed := 0
-	for i := 0; i <= num; i++ {
-		summed += i
-	}
-	return summed * summed
+	ret := num * (num + 1) / 2
+	return ret * ret
 }
 
 // SumOfSquares returns the sum of squares from 1...Num inclusive
