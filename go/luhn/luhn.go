@@ -1,69 +1,49 @@
 package luhn
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 )
 
-func reverse(s string) (result string) {
-	for _, v := range s {
-		result = string(v) + result
+func doubleNum(num int) int {
+	if num*2 <= 9 {
+		return num * 2
+	}
+	return num*2 - 9
+}
+
+func sanitizeInput(input string) (output []int, offset int) {
+	input = strings.Replace(input, " ", "", -1)
+	for _, num := range strings.Split(input, "") {
+		parsedNum, error := strconv.Atoi(num)
+		if error != nil {
+			offset++
+			continue
+		}
+		output = append(output, parsedNum)
 	}
 	return
 }
 
-func doubleNum(input int, index int) int {
-	if input == 0 {
-		return 0
-	}
-	if index%2 != 0 {
-		if input*2 <= 9 {
-			return input * 2
-		}
-		return input*2 - 9
-	}
-	return input
-}
-
-func newInput(input string) []int {
-	output := []int{}
-
-	for _, num := range strings.Split(reverse(strings.Replace(input, " ", "", -1)), "") {
-		parsedNum, error := strconv.Atoi(num)
-		if error == nil {
-			output = append(output, parsedNum)
-		} else {
-			output = append(output, 9)
-		}
-	}
-	return output
-}
-
-// Valid takes
+// Valid takes a string and returns true if it's valid according
+// to the Luhn algorithm
 func Valid(input string) bool {
-	fmt.Println("Input", input)
-	if len(input) < 2 {
-		fmt.Println(" ")
-		return false
-	}
+	sanitizedInput, offset := sanitizeInput(input)
 
-	var result int
-	sanitizedInput := newInput(input)
 	if len(sanitizedInput) < 2 {
 		return false
 	}
+
+	var greedyResult int
 	for idx, num := range sanitizedInput {
-		newNum := doubleNum(num, idx)
-		result += newNum
+		if len(sanitizedInput)%2 != 0 {
+			idx++
+		}
+		if idx%2+offset == 0 {
+			greedyResult += doubleNum(num)
+		} else {
+			greedyResult += num
+		}
 	}
-
-	fmt.Println("New input", newInput(input))
-	fmt.Println("Result", result)
-	fmt.Println(" ")
-
-	if result%10 == 0 {
-		return true
-	}
-	return false
+	return greedyResult%10 == 0
 }
