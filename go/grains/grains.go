@@ -15,5 +15,6 @@ func Square(input int) (uint64, error) {
 
 // Total takes
 func Total() uint64 {
-	return 18446744073709551615
+	output, _ := Square(65)
+	return output
 }
