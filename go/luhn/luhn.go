@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func doubleNum(num int) int {
+func processNum(num int) int {
 	if num*2 <= 9 {
 		return num * 2
 	}
@@ -40,7 +40,7 @@ func Valid(input string) bool {
 			idx++
 		}
 		if idx%2+offset == 0 {
-			greedyResult += doubleNum(num)
+			greedyResult += processNum(num)
 		} else {
 			greedyResult += num
 		}
