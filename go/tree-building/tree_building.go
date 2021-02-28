@@ -28,6 +28,13 @@ func (n *Node) sortChildren() {
 	})
 }
 
+func buildRootNode(r Record) (*Node, error) {
+	if r.ID >= 1 || r.Parent >= 1 {
+		return nil, errors.New("root can't have parent")
+	}
+	return &Node{ID: 0}, nil
+}
+
 func findNodeByID(id int, node *Node) (*Node, bool) {
 	if id == node.ID {
 		return node, true
@@ -35,7 +42,7 @@ func findNodeByID(id int, node *Node) (*Node, bool) {
 
 	if len(node.Children) > 0 {
 		for _, child := range node.Children {
-			if node, ok := findNodeByID(id, child); ok {
+			if node, found := findNodeByID(id, child); found {
 				return node, true
 			}
 		}
@@ -53,22 +60,21 @@ func validateRecord(record Record, rootNode *Node) error {
 	}
 
 	if record.Parent > record.ID {
-		return errors.New("parent ID shouldn't be higher than this ID")
+		return errors.New("parent ID shouldn't be higher than child ID")
 	}
 
 	if record.Parent == record.ID {
 		return errors.New("ID's of parent and Node can't be equal")
 	}
 
-	// Does this already exist?
-	if _, ok := findNodeByID(record.ID, rootNode); ok {
-		return errors.New("already exists")
+	if _, found := findNodeByID(record.ID, rootNode); found {
+		return errors.New("node already exists")
 	}
 
 	return nil
 }
 
-// Build takes records and returns the root node of a tree representation
+// Build takes records and returns the root node of the tree representation
 func Build(records []Record) (*Node, error) {
 	if len(records) == 0 {
 		return nil, nil
@@ -79,29 +85,26 @@ func Build(records []Record) (*Node, error) {
 	})
 
 	var rootNode *Node
-	for idx, r := range records {
-		if idx == 0 {
-			if r.ID >= 1 || r.Parent >= 1 {
-				return nil, errors.New("root can't have parent")
-			}
-			rootNode = &Node{
-				ID: r.ID,
-			}
-			continue
+	for index, r := range records {
+		if index < r.ID {
+			return nil, errors.New("Non-continuous node, can't build tree")
 		}
 
-		if idx < r.ID {
-			return nil, errors.New("Non-continuous node")
+		if index == 0 {
+			if node, err := buildRootNode(r); err == nil {
+				rootNode = node
+			} else {
+				return nil, err
+			}
+			continue
 		}
 
 		if err := validateRecord(r, rootNode); err != nil {
 			return nil, err
 		}
 
-		if node, ok := findNodeByID(r.Parent, rootNode); ok {
-			node.appendChild(&Node{
-				ID: r.ID,
-			})
+		if node, found := findNodeByID(r.Parent, rootNode); found {
+			node.appendChild(&Node{ID: r.ID})
 		}
 	}
 
