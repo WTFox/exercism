@@ -44,7 +44,7 @@ func findNodeByID(id int, node *Node) (*Node, bool) {
 }
 
 func validateRecord(record Record, rootNode *Node) error {
-	if record.ID == rootNode.ID && record.Parent >= 0 {
+	if record.ID == rootNode.ID && record.Parent >= 1 {
 		return errors.New("root node can't have parent")
 	}
 
@@ -59,6 +59,12 @@ func validateRecord(record Record, rootNode *Node) error {
 	if record.Parent == record.ID {
 		return errors.New("ID's of parent and Node can't be equal")
 	}
+
+	// Does this already exist?
+	if _, ok := findNodeByID(record.ID, rootNode); ok {
+		return errors.New("already exists")
+	}
+
 	return nil
 }
 
@@ -73,13 +79,19 @@ func Build(records []Record) (*Node, error) {
 	})
 
 	var rootNode *Node
-
 	for idx, r := range records {
 		if idx == 0 {
+			if r.ID >= 1 || r.Parent >= 1 {
+				return nil, errors.New("root can't have parent")
+			}
 			rootNode = &Node{
 				ID: r.ID,
 			}
 			continue
+		}
+
+		if idx < r.ID {
+			return nil, errors.New("Non-continuous node")
 		}
 
 		if err := validateRecord(r, rootNode); err != nil {
