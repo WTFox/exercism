@@ -63,3 +63,6 @@ target/
 
 # Exercism.io
 .exercism
+
+# TypeScript
+node_modules/
