@@ -1,29 +1,23 @@
 export class Clock {
-  protected hour: number;
-  protected minute: number;
+  readonly minutes: number;
 
   constructor(hour: number, minute: number = 0) {
-    const totalMinutes = minute + hour * 60;
-    [this.hour, this.minute] = this.hhmmFromTotalMinutes(totalMinutes);
+    this.minutes = hour * 60 + minute;
   }
 
-  protected hhmmFromTotalMinutes(totalMinutes: number): [number, number] {
-    let minutes = (totalMinutes + 60) % 60;
-    let hours = Math.floor((totalMinutes - minutes) / 60) % 24;
+  private get hour(): number {
+    const h = Math.floor((this.minutes / 60) % 24);
+    return h >= 0 ? h : h + 24;
+  }
 
-    if (minutes < 0) {
-      minutes += 60;
-      hours -= 1;
-    }
-
-    hours = hours < 0 ? hours + 24 : hours;
-    return [hours, minutes];
+  private get minute(): number {
+    const m = this.minutes % 60;
+    return m >= 0 ? m : m + 60;
   }
 
   public toString(): string {
-    const hour = this.hour.toString().padStart(2, "0");
-    const minute = this.minute.toString().padStart(2, "0");
-    return `${hour}:${minute}`;
+    const pad2 = (n: number): string => n.toString().padStart(2, "0");
+    return `${pad2(this.hour)}:${pad2(this.minute)}`;
   }
 
   public plus(minutes: number): Clock {
