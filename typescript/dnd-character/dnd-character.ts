@@ -1,10 +1,10 @@
 export class DnDCharacter {
-  strength: number;
-  dexterity: number;
-  constitution: number;
-  intelligence: number;
-  wisdom: number;
-  charisma: number;
+  readonly strength: number;
+  readonly dexterity: number;
+  readonly constitution: number;
+  readonly intelligence: number;
+  readonly wisdom: number;
+  readonly charisma: number;
 
   constructor() {
     this.strength = DnDCharacter.generateAbilityScore();
