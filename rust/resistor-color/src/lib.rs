@@ -28,10 +28,6 @@ pub fn value_to_color_string(value: u32) -> String {
     };
 }
 
-pub fn other_thing(value: u32) -> String {
-    ResistorColor::
-}
-
 pub fn colors() -> Vec<ResistorColor> {
     return all::<ResistorColor>().collect::<Vec<_>>();
 }
