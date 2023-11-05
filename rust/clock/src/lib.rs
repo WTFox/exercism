@@ -21,12 +21,20 @@ impl Clock {
 
 impl fmt::Display for Clock {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let hours = self.minutes / 60;
-        let minutes = self.minutes % 60;
+        // Ensure the minutes are within a day (0 to 1439)
+        let minutes_in_a_day = 24 * 60;
+        let mut normalized_minutes = self.minutes % minutes_in_a_day;
 
-        let normalized_minutes = if minutes < 0 { 60 + minutes } else { minutes };
-        let normalized_hours = if hours < 0 { 24 + hours } else { hours };
+        // Handle negative minutes
+        if normalized_minutes < 0 {
+            normalized_minutes += minutes_in_a_day;
+        }
 
-        write!(f, "{:02}:{:02}", normalized_hours, normalized_minutes)
+        // Calculate hours and minutes
+        let hours = normalized_minutes / 60;
+        let minutes = normalized_minutes % 60;
+
+        // Write to the provided formatter
+        write!(f, "{:02}:{:02}", hours, minutes)
     }
 }
