@@ -2,35 +2,24 @@ use std::fmt;
 
 #[derive(Debug, PartialEq)]
 pub struct Clock {
-    pub hours: i32,
-    pub minutes: i32,
+    hours: i32,
+    minutes: i32,
 }
 
 impl Clock {
-    fn normalize(&mut self) -> Self {
-        while self.minutes < 0 {
-            self.minutes += 60;
-            self.hours -= 1;
+    pub fn new(mut hours: i32, mut minutes: i32) -> Self {
+        hours += minutes / 60;
+        minutes %= 60;
+        hours %= 24;
+        if minutes < 0 {
+            minutes += 60;
+            hours -= 1;
         }
-        while self.minutes >= 60 {
-            self.minutes -= 60;
-            self.hours += 1;
-        }
-        while self.hours < 0 {
-            self.hours += 24;
-        }
-        while self.hours >= 24 {
-            self.hours -= 24;
+        if hours < 0 {
+            hours += 24;
         }
 
-        Clock {
-            hours: self.hours,
-            minutes: self.minutes,
-        }
-    }
-
-    pub fn new(hours: i32, minutes: i32) -> Self {
-        Clock { hours, minutes }.normalize()
+        Clock { hours, minutes }
     }
 
     pub fn add_minutes(&self, minutes: i32) -> Self {
