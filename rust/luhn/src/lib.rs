@@ -1,36 +1,21 @@
 /// Check a Luhn checksum.
 pub fn is_valid(code: &str) -> bool {
-    if code.trim().len() < 2 {
+    let clean_code = code.replace(' ', "");
+    if clean_code.len() <= 1 || clean_code.chars().any(|c| !c.is_ascii_digit()) {
         return false;
     }
 
-    if code
-        .chars()
-        .filter(|c| !c.is_whitespace())
-        .any(|c| !c.is_ascii_digit())
-    {
-        return false;
-    }
-
-    code.trim()
+    clean_code
         .chars()
         .rev()
-        .filter(|c| !c.is_ascii_whitespace() || c.is_ascii_digit())
         .enumerate()
         .map(|(i, c)| {
-            if i == 0 {
-                return c.to_digit(10).unwrap();
-            }
-
+            let mut digit = c.to_digit(10).expect("All characters should be digits");
             if i % 2 == 1 {
-                let mut result = c.to_digit(10).unwrap() * 2;
-                if result > 9 {
-                    result -= 9;
-                }
-                return result;
+                digit *= 2;
+                digit = if digit > 9 { digit - 9 } else { digit };
             }
-
-            c.to_digit(10).unwrap()
+            digit
         })
         .sum::<u32>()
         % 10
