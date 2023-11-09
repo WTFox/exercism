@@ -84,8 +84,6 @@ fn works_for_arrays() {
 }
 
 #[test]
-#[ignore]
-#[cfg(feature = "generic")]
 fn works_for_vec() {
     let vector = vec![6];
     assert_eq!(find(&vector, 6), Some(0));
@@ -93,8 +91,6 @@ fn works_for_vec() {
 }
 
 #[test]
-#[ignore]
-#[cfg(feature = "generic")]
 fn works_for_str_elements() {
     assert_eq!(find(["a"], "a"), Some(0));
     assert_eq!(find(["a", "b"], "b"), Some(1));
