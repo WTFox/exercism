@@ -1,3 +1,5 @@
+use std::iter::repeat;
+
 pub fn encode(input: &str) -> String {
     let mut encoded = String::new();
     let mut chars = input.chars().peekable();
@@ -31,7 +33,7 @@ pub fn decode(input: &str) -> String {
                     break;
                 }
             }
-            decoded.extend(std::iter::repeat(chars.next().unwrap()).take(count.parse().unwrap()));
+            decoded.extend(repeat(chars.next().unwrap()).take(count.parse().unwrap()));
         } else {
             decoded.push(ch);
         }
