@@ -1,5 +1,6 @@
 use std::iter::repeat;
 
+/// AAABBBCCCC -> 3A3B4C
 pub fn encode(input: &str) -> String {
     let mut encoded = String::new();
     let mut chars = input.chars().peekable();
@@ -19,6 +20,7 @@ pub fn encode(input: &str) -> String {
     encoded
 }
 
+/// 3A3B4C -> AAABBBCCCC
 pub fn decode(input: &str) -> String {
     let mut decoded = String::new();
     let mut chars = input.chars().peekable();
