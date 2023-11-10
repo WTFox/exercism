@@ -11,8 +11,8 @@ pub enum Allergen {
 }
 
 impl Allergen {
-    pub fn to_vec() -> Vec<Allergen> {
-        vec![
+    pub fn to_array() -> [Allergen; 8] {
+        [
             Allergen::Eggs,
             Allergen::Peanuts,
             Allergen::Shellfish,
@@ -35,11 +35,17 @@ impl Allergies {
     }
 
     pub fn is_allergic_to(&self, allergen: &Allergen) -> bool {
-        self.allergies().contains(allergen)
+        let allergens = Allergen::to_array();
+        let index = allergens
+            .iter()
+            .position(|a| a.clone() == *allergen)
+            .unwrap_or(0);
+
+        (1 << index) & self.score != 0
     }
 
     pub fn allergies(&self) -> Vec<Allergen> {
-        Allergen::to_vec()
+        Allergen::to_array()
             .iter()
             .enumerate()
             .filter(|(i, _)| 1 << i & self.score != 0)
