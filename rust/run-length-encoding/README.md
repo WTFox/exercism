@@ -54,3 +54,4 @@ be decoded always represent the count for the following character.
 ### Based on
 
 Wikipedia - https://en.wikipedia.org/wiki/Run-length_encoding
+
