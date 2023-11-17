@@ -6,13 +6,11 @@ fn valid_dna_input() {
 }
 
 #[test]
-#[ignore]
 fn valid_rna_input() {
     assert!(dna::Rna::new("CGAU").is_ok());
 }
 
 #[test]
-#[ignore]
 fn invalid_dna_input() {
     // Invalid character
     assert_eq!(dna::Dna::new("X").err(), Some(0));
@@ -23,7 +21,6 @@ fn invalid_dna_input() {
 }
 
 #[test]
-#[ignore]
 fn invalid_rna_input() {
     // Invalid character
     assert_eq!(dna::Rna::new("X").unwrap_err(), 0);
@@ -34,7 +31,6 @@ fn invalid_rna_input() {
 }
 
 #[test]
-#[ignore]
 fn acid_equals_acid() {
     assert_eq!(dna::Dna::new("CGA").unwrap(), dna::Dna::new("CGA").unwrap());
     assert_ne!(dna::Dna::new("CGA").unwrap(), dna::Dna::new("AGC").unwrap());
@@ -43,7 +39,6 @@ fn acid_equals_acid() {
 }
 
 #[test]
-#[ignore]
 fn transcribes_cytosine_guanine() {
     assert_eq!(
         dna::Rna::new("G").unwrap(),
