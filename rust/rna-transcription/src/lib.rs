@@ -1,55 +1,41 @@
-#[derive(Debug, PartialEq, Eq)]
-pub struct Dna<'a> {
-    nucleotides: &'a str,
+#[derive(Debug, PartialEq)]
+pub struct Dna {
+    nucleotides: String,
 }
 
-#[derive(Debug, PartialEq, Eq)]
-pub struct Rna<'a> {
-    nucleotides: &'a str,
+#[derive(Debug, PartialEq)]
+pub struct Rna {
+    nucleotides: String,
 }
 
-impl<'a> Dna<'a> {
+const RNA: [char; 4] = ['C', 'G', 'A', 'U'];
+const DNA: [char; 4] = ['G', 'C', 'T', 'A'];
+
+fn validate(s: &str, chars: [char; 4]) -> Result<String, usize> {
+    match s.chars().position(|c| !chars.contains(&c)) {
+        Some(x) => Err(x),
+        None => Ok(s.to_string()),
+    }
+}
+
+fn transcribe(nucleotide: char) -> char {
+    RNA[DNA.iter().position(|&c| c == nucleotide).unwrap()]
+}
+
+impl Dna {
     pub fn new(dna: &str) -> Result<Dna, usize> {
-        let invalid_index = dna
-            .chars()
-            .map(|c| matches!(c, 'G' | 'C' | 'T' | 'A'))
-            .position(|x| !x);
-
-        match invalid_index {
-            None => Ok(Dna { nucleotides: dna }),
-            _ => Err(invalid_index.unwrap()),
-        }
+        validate(dna, DNA).map(|nucleotides| Dna { nucleotides })
     }
 
-    pub fn into_rna(self) -> Rna<'a> {
+    pub fn into_rna(self) -> Rna {
         Rna {
-            nucleotides: self
-                .nucleotides
-                .chars()
-                .map(|c| match c {
-                    'G' => 'C',
-                    'C' => 'G',
-                    'T' => 'A',
-                    'A' => 'U',
-                    _ => unreachable!(),
-                })
-                .collect::<String>()
-                .as_str(),
+            nucleotides: self.nucleotides.chars().map(transcribe).collect(),
         }
     }
 }
 
-impl<'a> Rna<'a> {
+impl Rna {
     pub fn new(rna: &str) -> Result<Rna, usize> {
-        let invalid_index = rna
-            .clone()
-            .chars()
-            .map(|c| matches!(c, 'G' | 'C' | 'U' | 'A'))
-            .position(|x| !x);
-
-        match invalid_index {
-            None => Ok(Rna { nucleotides: rna }),
-            _ => Err(invalid_index.unwrap()),
-        }
+        validate(rna, RNA).map(|nucleotides| Rna { nucleotides })
     }
 }
